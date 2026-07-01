@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Detail - Eclipse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --primary: #0066ff; --gradient: linear-gradient(135deg, #0066ff 0%, #0052cc 100%); --darker: #050505; --light: #f8f9fa; --lighter: #ffffff; --border: #e9ecef; --text-primary: #1a1a1a; --text-secondary: #6c757d; --shadow: 0 20px 40px rgba(0,0,0,0.1); }
+body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--text-primary); line-height: 1.6; }
+
+/* ===== FIXED NAVBAR STYLES (Matches other pages) ===== */
+.navbar { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; width: calc(100% - 40px); max-width: 1400px; transition: all 0.4s; }
+.navbar.is-sticky { top: 0; width: 100%; max-width: 100%; border-radius: 0; }
+.navbar-inner { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 16px; padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.navbar.is-sticky .navbar-inner { border-radius: 0; padding: 12px 60px; }
+.logo { font-size: 28px; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; letter-spacing: -1px; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-primary); font-weight: 500; font-size: 14px; transition: color 0.3s; position: relative; }
+.nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--gradient); transition: width 0.3s; }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.active { color: var(--primary); }
+.nav-links a.active::after { width: 100%; }
+.nav-cta { background: var(--gradient); color: white !important; padding: 10px 24px; border-radius: 10px; font-weight: 600; }
+.nav-cta::after { display: none; }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; z-index: 1001; }
+.hamburger span { width: 24px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: all 0.3s ease; }
+.hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.page-hero { min-height: 40vh; background: var(--darker); display: flex; align-items: center; justify-content: center; padding: 160px 20px 80px; position: relative; }
+.page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 50%, rgba(0,102,255,0.15) 0%, transparent 50%); pointer-events: none; }
+.page-hero-content { text-align: center; max-width: 900px; position: relative; z-index: 2; }
+.page-hero h1 { font-size: clamp(40px, 7vw, 72px); font-weight: 900; color: white; margin-bottom: 24px; }
+.page-hero h1 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-hero p { font-size: 18px; color: rgba(255,255,255,0.7); }
+.breadcrumb { display: flex; gap: 10px; justify-content: center; color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 20px; }
+.breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; }
+.breadcrumb .separator { color: rgba(255,255,255,0.3); }
+
+/* Single Post Styles */
+/* FIXED: Increased top padding to 140px so content doesn't hide behind the fixed navbar */
+.single-post-container { max-width: 900px; margin: 0 auto; padding: 140px 20px 80px; }
+.single-post-header { text-align: center; margin-bottom: 40px; }
+.single-post-categories { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+.tag { padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; text-transform: uppercase; text-decoration: none; }
+.tag-blue { background: rgba(0,102,255,0.1); color: var(--primary); }
+.tag-pink { background: rgba(236,72,153,0.1); color: #ec4899; }
+.tag-yellow { background: rgba(251,191,36,0.15); color: #b45309; }
+.single-post-title { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--text-primary); }
+.single-post-meta { display: flex; align-items: center; gap: 16px; justify-content: center; }
+.author-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border); }
+.author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.blog-meta-info { text-align: left; }
+.blog-meta-info .author-name { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.blog-meta-info .date { font-size: 13px; color: var(--text-secondary); }
+.single-post-image { width: 100%; height: 500px; object-fit: cover; border-radius: 24px; margin-bottom: 40px; box-shadow: var(--shadow); }
+.single-post-content { font-size: 17px; line-height: 1.8; color: var(--text-primary); }
+.single-post-content h3 { font-size: 28px; font-weight: 700; margin: 32px 0 16px; color: var(--text-primary); }
+.single-post-content p { margin-bottom: 20px; color: var(--text-secondary); }
+.author-bio-box { display: flex; gap: 20px; align-items: center; background: var(--lighter); border: 1px solid var(--border); border-radius: 20px; padding: 30px; margin-top: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+.author-bio-box img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); flex-shrink: 0; }
+.author-bio-info h4 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.author-bio-info p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+.post-navigation { display: flex; justify-content: center; margin-top: 50px; }
+.post-nav-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: var(--gradient); color: white; border-radius: 100px; text-decoration: none; font-weight: 600; transition: all 0.3s; }
+.post-nav-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,102,255,0.3); }
+
+/* FIXED: Added proper mobile menu styles */
+@media (max-width: 768px) { 
+    .hamburger { display: flex; }
+    .nav-links { position: fixed; top: 0; right: -100%; width: 80%; height: 100vh; background: var(--lighter); flex-direction: column; align-items: flex-start; padding: 100px 40px 40px; gap: 24px; transition: right 0.4s; z-index: 1000; border-radius: 16px 16px 0 0; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+    .nav-links.active { right: 0; }
+    .nav-links a { font-size: 18px; width: 100%; }
+    .nav-cta { width: 100%; text-align: center; justify-content: center; display: flex; margin-top: 20px; }
+    .single-post-image { height: 300px; }
+    .author-bio-box { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+<!-- FIXED: Added ID to nav-links and the Hamburger button -->
+<nav class="navbar" id="navbar">
+<div class="navbar-inner">
+<a href="index.html" class="logo">Eclipse</a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Work</a>
+<a href="blog.html" class="active">Journal</a>
+<a href="contact.html" class="nav-cta">Start a Project</a>
+</div>
+<button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div>
+</nav>
+
+<!-- <section class="page-hero">
+<div class="page-hero-content">
+<h1 id="pageTitle">Journal <span>Detail</span></h1>
+<p>Read our latest insights and behind-the-scenes stories.</p>
+<div class="breadcrumb"><a href="index.html">Home</a><span class="separator">/</span><a href="blog.html">Journal</a><span class="separator">/</span><span id="breadcrumbTitle">Post</span></div>
+</div>
+</section> -->
+
+<section class="single-post-container" id="singlePostContainer">
+<!-- Dynamically populated by JS -->
+</section>
+
+<script>
+// ===== BLOG DATA (Updated to match blog.html with all 9 posts) =====
+const blogPosts = [
+    { id: 1, title: "Breaking Down the VFX in Midnight Horizon", excerpt: "A deep dive into the 200+ VFX shots that brought our latest feature film to life.", content: "<p>Welcome to a deep dive into the visual effects of Midnight Horizon. In this post, we explore the 200+ VFX shots that brought our latest feature film to life.</p><h3>Creature Design</h3><p>One of the most challenging aspects was creating the photorealistic creatures that inhabit the quantum realm. Our team spent over 3,000 hours on modeling, texturing, and rigging.</p><h3>Environment Creation</h3><p>The environments were built using a combination of practical location scans and fully CGI extensions. We utilized Unreal Engine for real-time lighting previews.</p><p>Stay tuned for more behind-the-scenes content from our VFX team!</p>", image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80", categories: ["VFX", "Breakdown"], author: "Thomas Alison", authorImg: "https://i.pravatar.cc/100?img=12", date: "August 13, 2025", comments: 12 },
+    { id: 2, title: "The Art of Cinematic Color Grading in 2025", excerpt: "Explore the latest trends and techniques in cinematic color grading this year.", content: "<p>Color grading is more than just making an image look pretty. It's about storytelling, evoking emotion, and guiding the audience's eye.</p><h3>The Shift to HDR</h3><p>With the widespread adoption of HDR displays, colorists now have a much wider gamut and brightness range to play with.</p><h3>AI in Color Grading</h3><p>While AI tools are becoming prevalent, the artistic intent of a human colorist remains irreplaceable.</p>", image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&q=80", categories: ["Color", "Grading"], author: "Elena Rostova", authorImg: "https://i.pravatar.cc/100?img=25", date: "August 10, 2025", comments: 8 },
+    { id: 3, title: "Choosing the Right Camera for Your Next Project", excerpt: "A comprehensive guide to selecting the perfect camera for your production needs.", content: "<p>Selecting the right camera is one of the most critical decisions in pre-production.</p><h3>Sensor Size Matters</h3><p>Full-frame sensors offer excellent low-light performance and shallow depth of field.</p><h3>Resolution vs. Dynamic Range</h3><p>Don't get caught up in the megapixel race. Prioritize dynamic range and color science.</p>", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&q=80", categories: ["Camera", "Gear"], author: "Alex Thompson", authorImg: "https://i.pravatar.cc/100?img=20", date: "August 5, 2025", comments: 5 },
+    { id: 4, title: "Our Post-Production Workflow Explained", excerpt: "Take a peek behind the curtain at our streamlined post-production workflow.", content: "<p>A solid post-production workflow is the backbone of any successful film project.</p><h3>Ingest and Proxy</h3><p>As soon as footage arrives on set, it's ingested, verified, and low-res proxies are generated.</p><h3>Conform and Color</h3><p>Once the edit is locked, we conform the timeline using the original RAW files.</p>", image: "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=1200&q=80", categories: ["Editing", "Workflow"], author: "Marcus Rivera", authorImg: "https://i.pravatar.cc/100?img=33", date: "August 1, 2025", comments: 15 },
+    { id: 5, title: "Lessons from 10 Years of Film Production", excerpt: "Key insights and lessons learned from a decade of working in the film industry.", content: "<p>Reflecting on 10 years in the film industry, there are many lessons that stand out.</p><h3>Pre-Production is Everything</h3><p>The more time you spend planning in pre-production, the smoother your shoot will be.</p><h3>Protect Your Audio</h3><p>Bad video can be a stylistic choice; bad audio is just unwatchable.</p>", image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80", categories: ["Film", "Production"], author: "Sarah Chen", authorImg: "https://i.pravatar.cc/100?img=12", date: "July 28, 2025", comments: 20 },
+    { id: 6, title: "Creating Visually Stunning Music Videos", excerpt: "Tips and techniques for creating music videos that captivate audiences.", content: "<p>Music videos are a unique format that allows for immense creative freedom.</p><h3>Sync to the Beat</h3><p>The edit is just as important as the visuals. Cutting on the beat creates a rhythmic experience.</p><h3>Lighting for Mood</h3><p>Music videos thrive on strong, stylized lighting. Don't be afraid to use bold colors.</p>", image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&q=80", categories: ["Music", "Video"], author: "Aisha Patel", authorImg: "https://i.pravatar.cc/100?img=47", date: "July 22, 2025", comments: 9 },
+    { id: 7, title: "Mastering Cinematic Lighting Techniques", excerpt: "Learn how to use light and shadow to create mood and depth in your scenes.", content: "<p>Lighting is the soul of cinematography. It dictates the mood, guides the viewer's eye, and adds depth to a flat image.</p><h3>Three-Point Lighting</h3><p>The foundation of most lighting setups. Mastering key, fill, and back light is essential.</p><h3>Natural vs. Artificial</h3><p>Knowing when to use the sun and when to bring in the big lights can make or break a scene.</p>", image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1200&q=80", categories: ["Lighting", "Cinematography"], author: "David Kim", authorImg: "https://i.pravatar.cc/100?img=52", date: "July 15, 2025", comments: 7 },
+    { id: 8, title: "The Importance of Sound Design in Film", excerpt: "Discover how audio post-production elevates the visual experience.", content: "<p>Sound is often called the invisible art. When done right, the audience feels it without necessarily noticing it.</p><h3>Foley and Ambience</h3><p>Creating the subtle sounds of footsteps and room tone builds a believable world.</p><h3>The Emotional Impact</h3><p>A great score and sound design can turn a good scene into an unforgettable one.</p>", image: "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=1200&q=80", categories: ["Audio", "Sound Design"], author: "James Wilson", authorImg: "https://i.pravatar.cc/100?img=60", date: "July 10, 2025", comments: 11 },
+    { id: 9, title: "Directing Actors for Authentic Performances", excerpt: "Tips and tricks for getting the best performances from your cast.", content: "<p>Directing is as much about psychology as it is about visual composition.</p><h3>Creating a Safe Space</h3><p>Actors need to feel vulnerable and supported to give their best performances.</p><h3>Actionable Direction</h3><p>Instead of telling an actor how to feel, give them actionable tasks and objectives.</p>", image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80", categories: ["Directing", "Storytelling"], author: "Sarah Chen", authorImg: "https://i.pravatar.cc/100?img=12", date: "July 5, 2025", comments: 14 }
+];
+
+const tagColors = { 'VFX': 'tag-blue', 'Breakdown': 'tag-pink', 'Color': 'tag-yellow', 'Grading': 'tag-blue', 'Camera': 'tag-pink', 'Gear': 'tag-yellow', 'Editing': 'tag-blue', 'Workflow': 'tag-pink', 'Film': 'tag-yellow', 'Production': 'tag-blue', 'Music': 'tag-pink', 'Video': 'tag-yellow', 'Lighting': 'tag-blue', 'Cinematography': 'tag-yellow', 'Audio': 'tag-pink', 'Sound Design': 'tag-blue', 'Directing': 'tag-yellow', 'Storytelling': 'tag-pink' };
+
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const postId = parseInt(getQueryParam('id'));
+    const post = blogPosts.find(p => p.id === postId);
+
+    if (!post) {
+        window.location.href = 'blog.html';
+        return;
+    }
+
+    document.title = `${post.title} - Eclipse Studios`;
+
+    const tagsHTML = post.categories.map(cat => `<a href="category.html?cat=${encodeURIComponent(cat)}" class="tag ${tagColors[cat] || 'tag-blue'}">${cat}</a>`).join('');
+    
+    const container = document.getElementById('singlePostContainer');
+    container.innerHTML = `
+        <div class="single-post-header">
+            <div class="single-post-categories">${tagsHTML}</div>
+            <h1 class="single-post-title">${post.title}</h1>
+            <div class="single-post-meta">
+                <div class="author-avatar"><img src="${post.authorImg}" alt="${post.author}"></div>
+                <div class="blog-meta-info">
+                    <div class="author-name">${post.author}</div>
+                    <div class="date">${post.date} • ${post.comments} Comments</div>
+                </div>
+            </div>
+        </div>
+        <img src="${post.image}" alt="${post.title}" class="single-post-image">
+        <div class="single-post-content">
+            ${post.content}
+        </div>
+        <div class="author-bio-box">
+            <img src="${post.authorImg}" alt="${post.author}">
+            <div class="author-bio-info">
+                <h4>${post.author}</h4>
+                <p>Senior Artist at Eclipse Studios. Passionate about visual storytelling and pushing the boundaries of cinematic VFX and production.</p>
+            </div>
+        </div>
+        <div class="post-navigation">
+            <a href="blog.html" class="post-nav-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Journal
+            </a>
+        </div>
+    `;
+});
+
+// FIXED: Added Mobile Menu Toggle Logic
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('is-sticky', window.scrollY > 50));
+
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('active');
+  });
+});
+</script>
+</body>
+</html>

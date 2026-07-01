@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - Eclipse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+--primary: #0066ff; --primary-dark: #0052cc; --secondary: #1a1a1a; --accent: #ec4899;
+--gradient: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+--gradient-accent: linear-gradient(135deg, #0066ff 0%, #ec4899 100%);
+--dark: #0a0a0a; --darker: #050505; --surface: #1a1a1a;
+--light: #f8f9fa; --lighter: #ffffff; --gray: #6b7280; --light-gray: #e5e7eb; --border: #e9ecef;
+--text-primary: #1a1a1a; --text-secondary: #6c757d;
+--shadow: 0 20px 40px rgba(0,0,0,0.1); --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--text-primary); overflow-x: hidden; line-height: 1.6; }
+
+/* NAVBAR */
+.navbar { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; width: calc(100% - 40px); max-width: 1400px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.navbar.is-sticky { top: 0; width: 100%; max-width: 100%; border-radius: 0; }
+.navbar-inner { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 16px; padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.1); }
+.navbar.is-sticky .navbar-inner { border-radius: 0; padding: 12px 60px; }
+.logo { font-size: 28px; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; letter-spacing: -1px; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-primary); font-weight: 500; font-size: 14px; transition: color 0.3s; position: relative; }
+.nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--gradient); transition: width 0.3s; }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.active { color: var(--primary); }
+.nav-links a.active::after { width: 100%; }
+.nav-cta { background: var(--gradient); color: white !important; padding: 10px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; transition: transform 0.3s, box-shadow 0.3s; }
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.nav-cta::after { display: none; }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; z-index: 1001; }
+.hamburger span { width: 24px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: all 0.3s ease; }
+.hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* PAGE HERO */
+.page-hero { min-height: 60vh; background: var(--darker); position: relative; display: flex; align-items: center; justify-content: center; padding: 160px 20px 80px; overflow: hidden; }
+.page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 50%, rgba(0,102,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(236,72,153,0.1) 0%, transparent 50%); pointer-events: none; }
+.page-hero-content { text-align: center; max-width: 900px; position: relative; z-index: 2; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: rgba(0,102,255,0.1); border: 1px solid rgba(0,102,255,0.3); border-radius: 100px; color: #60a5fa; font-size: 13px; font-weight: 600; margin-bottom: 32px; text-transform: uppercase; letter-spacing: 0.1em; }
+.page-hero h1 { font-size: clamp(40px, 7vw, 72px); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; color: white; margin-bottom: 24px; }
+.page-hero h1 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-hero p { font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 32px; line-height: 1.7; }
+.breadcrumb { display: flex; gap: 10px; justify-content: center; align-items: center; color: rgba(255,255,255,0.6); font-size: 14px; }
+.breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.3s; }
+.breadcrumb a:hover { color: var(--primary); }
+.breadcrumb .separator { color: rgba(255,255,255,0.3); }
+
+/* STORY SECTION */
+.story-section { padding: 100px 20px; background: var(--lighter); }
+.story-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.story-content .section-label { display: inline-block; padding: 6px 16px; background: rgba(0,102,255,0.1); border: 1px solid rgba(0,102,255,0.2); border-radius: 100px; color: var(--primary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+.story-content h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--text-primary); }
+.story-content h2 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.story-content p { font-size: 16px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+.story-image { position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 4/5; }
+.story-image img { width: 100%; height: 100%; object-fit: cover; }
+
+/* VALUES */
+.values-section { padding: 100px 20px; background: var(--light); }
+.values-container { max-width: 1200px; margin: 0 auto; }
+.section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+.key-badge { display: inline-block; background: var(--secondary); color: #fff; font-size: 13px; font-weight: 600; padding: 8px 20px; border-radius: 50px; margin-bottom: 24px; }
+.section-title { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+.section-subtitle { font-size: 17px; color: var(--text-secondary); line-height: 1.6; }
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.value-card { background: var(--lighter); border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px; transition: all 0.3s; }
+.value-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); border-color: rgba(0,102,255,0.2); }
+.value-icon { width: 64px; height: 64px; border-radius: 16px; background: var(--gradient); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: white; }
+.value-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); }
+.value-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+
+/* TIMELINE */
+.timeline-section { padding: 100px 20px; background: var(--lighter); }
+.timeline-container { max-width: 900px; margin: 0 auto; }
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: var(--gradient); }
+.timeline-item { position: relative; padding-bottom: 50px; }
+.timeline-item::before { content: ''; position: absolute; left: -36px; top: 6px; width: 20px; height: 20px; border-radius: 50%; background: var(--lighter); border: 3px solid var(--primary); }
+.timeline-year { display: inline-block; padding: 4px 14px; background: rgba(0,102,255,0.1); color: var(--primary); border-radius: 100px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+.timeline-item h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+.timeline-item p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+
+/* TEAM */
+.team-section { padding: 100px 20px; background: var(--light); }
+.team-container { max-width: 1200px; margin: 0 auto; }
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+.team-card { background: var(--lighter); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: all 0.3s; }
+.team-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+.team-image { aspect-ratio: 1; overflow: hidden; }
+.team-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.team-card:hover .team-image img { transform: scale(1.05); }
+.team-info { padding: 24px; text-align: center; }
+.team-info h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: var(--text-primary); }
+.team-info p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+.team-social { display: flex; gap: 10px; justify-content: center; }
+.team-social a { width: 36px; height: 36px; border-radius: 50%; background: var(--light); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none; transition: all 0.3s; }
+.team-social a:hover { background: var(--gradient); color: white; }
+
+/* FOOTER */
+.main-footer { background: #f8f9fa; padding: 80px 20px 0; }
+.footer-container { max-width: 1200px; margin: 0 auto; }
+.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 60px; }
+.brand-card { background: var(--gradient); border-radius: 24px; padding: 32px; color: #ffffff; box-shadow: 0 20px 40px rgba(0,102,255,0.2); }
+.footer-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 32px; }
+.logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+.footer-logo span { font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; }
+.logo-highlight { font-weight: 400; opacity: 0.9; }
+.contact-info { display: flex; flex-direction: column; gap: 24px; }
+.contact-item { display: flex; gap: 16px; align-items: flex-start; }
+.contact-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; backdrop-filter: blur(10px); }
+.contact-details h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #ffffff; }
+.contact-details p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0; }
+.contact-divider { height: 1px; background: rgba(255,255,255,0.2); margin: 8px 0; }
+.footer-heading { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 24px; letter-spacing: -0.01em; }
+.footer-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.footer-list li a { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #6b7280; text-decoration: none; transition: all 0.2s ease; }
+.footer-list li a:hover { color: var(--primary); transform: translateX(4px); }
+.arrow { color: var(--primary); font-weight: 600; }
+.footer-bottom { background: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px 20px; }
+.footer-bottom-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.copyright { font-size: 14px; color: #6b7280; }
+.footer-bottom-links { display: flex; gap: 24px; }
+.footer-bottom-links a { font-size: 14px; color: #6b7280; text-decoration: none; transition: color 0.2s ease; }
+.footer-bottom-links a:hover { color: var(--primary); }
+
+@media (max-width: 1024px) {
+.story-container { grid-template-columns: 1fr; gap: 40px; }
+.values-grid { grid-template-columns: repeat(2, 1fr); }
+.team-grid { grid-template-columns: repeat(2, 1fr); }
+.footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+.hamburger { display: flex; }
+.nav-links { position: fixed; top: 0; right: -100%; width: 80%; height: 100vh; background: var(--lighter); flex-direction: column; align-items: flex-start; padding: 100px 40px 40px; gap: 24px; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; overflow-y: auto; border-radius: 16px 16px 0px 0px; }
+.navbar.is-sticky .nav-links { border-radius: 0px; }
+.nav-links.active { right: 0; }
+.nav-links a { font-size: 18px; width: 100%; }
+.nav-cta { margin-top: 20px; width: 100%; text-align: center; justify-content: center; display: flex; }
+.values-grid { grid-template-columns: 1fr; }
+.team-grid { grid-template-columns: 1fr; }
+.footer-grid { grid-template-columns: 1fr; }
+.footer-bottom-container { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+<div class="navbar-inner">
+<a href="index.html" class="logo">Eclipse</a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Home</a>
+<a href="about.html" class="active">About</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Work</a>
+<a href="team.html">Team</a>
+<a href="blog.html">Journal</a>
+<a href="contact.html" class="nav-cta">Start a Project</a>
+</div>
+<button class="hamburger" id="hamburger" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
+</div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+<div class="page-hero-content">
+<div class="hero-badge"><span>🎬</span> Our Story</div>
+<h1>Crafting <span>Cinematic</span> Experiences Since 2018</h1>
+<p>We're a collective of directors, VFX artists, cinematographers, and motion designers united by one mission: creating visuals that leave lasting impressions.</p>
+<div class="breadcrumb">
+<a href="index.html">Home</a>
+<span class="separator">/</span>
+<span>About Us</span>
+</div>
+</div>
+</section>
+
+<!-- STORY -->
+<section class="story-section">
+<div class="story-container">
+<div class="story-content">
+<span class="section-label">Our Story</span>
+<h2>From a small studio to an <span>award-winning</span> collective</h2>
+<p>Founded in 2018 by a group of passionate filmmakers, Eclipse Studios began with a simple vision: to push the boundaries of visual storytelling. What started as a three-person team working out of a small Los Angeles studio has grown into a 45-member collective serving clients worldwide.</p>
+<p>Over the past decade, we've had the privilege of working on over 250 projects — from indie films that premiered at Sundance to global brand campaigns reaching millions. Our work has been recognized with 32 industry awards, but what matters most to us is the impact our visuals have on audiences.</p>
+<p>Today, we continue to blend technical mastery with artistic vision, delivering work that stands out in an increasingly crowded visual landscape.</p>
+</div>
+<div class="story-image">
+<img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" alt="Our Studio">
+</div>
+</div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+<div class="values-container">
+<div class="section-header">
+<span class="key-badge">Our Values</span>
+<h2 class="section-title">What Drives Us Forward</h2>
+<p class="section-subtitle">The principles that guide every frame we create.</p>
+</div>
+<div class="values-grid">
+<div class="value-card">
+<div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+<h3>Craftsmanship</h3>
+<p>Every pixel matters. We obsess over details to deliver work that stands the test of time.</p>
+</div>
+<div class="value-card">
+<div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+<h3>Innovation</h3>
+<p>We push boundaries with cutting-edge technology and creative problem-solving.</p>
+</div>
+<div class="value-card">
+<div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+<h3>Collaboration</h3>
+<p>We work as an extension of your team, building partnerships that last beyond any single project.</p>
+</div>
+<div class="value-card">
+<div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+<h3>Excellence</h3>
+<p>We don't settle. We iterate, refine, and perfect until the work exceeds expectations.</p>
+</div>
+<div class="value-card">
+<div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+<h3>Passion</h3>
+<p>We love what we do. That passion shines through in every frame we deliver.</p>
+</div>
+<div class="value-card">
+<div class="value-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+<h3>Global Reach</h3>
+<p>From LA to London, we collaborate with clients and talent around the world.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+<div class="timeline-container">
+<div class="section-header">
+<span class="key-badge">Our Journey</span>
+<h2 class="section-title">Milestones That Define Us</h2>
+</div>
+<div class="timeline">
+<div class="timeline-item">
+<span class="timeline-year">2018</span>
+<h3>Studio Founded</h3>
+<p>Eclipse Studios was born in a small Los Angeles loft with a team of three passionate filmmakers.</p>
+</div>
+<div class="timeline-item">
+<span class="timeline-year">2019</span>
+<h3>First Major Feature</h3>
+<p>Delivered VFX for our first feature film, earning recognition at three international festivals.</p>
+</div>
+<div class="timeline-item">
+<span class="timeline-year">2021</span>
+<h3>Team Expansion</h3>
+<p>Grew to 25 artists and moved into our current 10,000 sq ft studio in downtown LA.</p>
+</div>
+<div class="timeline-item">
+<span class="timeline-year">2023</span>
+<h3>Award-Winning Year</h3>
+<p>Won 8 industry awards including Best VFX at the Visual Effects Society Awards.</p>
+</div>
+<div class="timeline-item">
+<span class="timeline-year">2025</span>
+<h3>Global Expansion</h3>
+<p>Opened satellite studios in London and Tokyo, serving clients across 4 continents.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+<div class="team-container">
+<div class="section-header">
+<span class="key-badge">Our Team</span>
+<h2 class="section-title">Meet the Artists</h2>
+<p class="section-subtitle">The talented humans behind the magic.</p>
+</div>
+<div class="team-grid">
+<div class="team-card">
+<div class="team-image"><img src="https://i.pravatar.cc/400?img=12" alt="Sarah Chen"></div>
+<div class="team-info">
+<h3>Sarah Chen</h3>
+<p>Creative Director</p>
+<div class="team-social">
+<a href="#"><i class="fab fa-linkedin-in"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+<a href="#"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+</div>
+<div class="team-card">
+<div class="team-image"><img src="https://i.pravatar.cc/400?img=33" alt="Marcus Rivera"></div>
+<div class="team-info">
+<h3>Marcus Rivera</h3>
+<p>VFX Supervisor</p>
+<div class="team-social">
+<a href="#"><i class="fab fa-linkedin-in"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+<a href="#"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+</div>
+<div class="team-card">
+<div class="team-image"><img src="https://i.pravatar.cc/400?img=47" alt="Aisha Patel"></div>
+<div class="team-info">
+<h3>Aisha Patel</h3>
+<p>Motion Design Lead</p>
+<div class="team-social">
+<a href="#"><i class="fab fa-linkedin-in"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+<a href="#"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+</div>
+<div class="team-card">
+<div class="team-image"><img src="https://i.pravatar.cc/400?img=52" alt="David Kim"></div>
+<div class="team-info">
+<h3>David Kim</h3>
+<p>Head of Production</p>
+<div class="team-social">
+<a href="#"><i class="fab fa-linkedin-in"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+<a href="#"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+<div class="footer-container">
+<div class="footer-grid">
+<div class="footer-brand"><div class="brand-card">
+<a href="index.html" class="footer-logo"><div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span>Eclipse<span class="logo-highlight"> Studios</span></span></a>
+<div class="contact-info">
+<div class="contact-item"><div class="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="contact-details"><h4>Contact Info</h4><p>hello@eclipsestudios.com</p><p>+1 (555) 123-4567</p></div></div>
+<div class="contact-divider"></div>
+<div class="contact-item"><div class="contact-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="contact-details"><h4>Studio Location</h4><p>123 Cinema Avenue<br>Los Angeles, CA 90028</p></div></div>
+</div>
+</div></div>
+<div class="footer-links-col"><h3 class="footer-heading">Pages</h3><ul class="footer-list">
+<li><a href="index.html"><span class="arrow">»</span> Home</a></li>
+<li><a href="about.html"><span class="arrow">»</span> About Us</a></li>
+<li><a href="services.html"><span class="arrow">»</span> Services</a></li>
+<li><a href="portfolio.html"><span class="arrow">»</span> Portfolio</a></li>
+<li><a href="team.html"><span class="arrow">»</span> Team</a></li>
+</ul></div>
+<div class="footer-links-col"><h3 class="footer-heading">Support</h3><ul class="footer-list">
+<li><a href="faq.html"><span class="arrow">»</span> FAQ's</a></li>
+<li><a href="contact.html"><span class="arrow">»</span> Contact Us</a></li>
+<li><a href="careers.html"><span class="arrow">»</span> Careers</a></li>
+<li><a href="testimonials.html"><span class="arrow">»</span> Testimonials</a></li>
+</ul></div>
+<div class="footer-links-col"><h3 class="footer-heading">Our Services</h3><ul class="footer-list">
+<li><a href="film-production.html"><span class="arrow">»</span> Film Production</a></li>
+<li><a href="vfx-cgi.html"><span class="arrow">»</span> VFX & CGI</a></li>
+<li><a href="motion-design.html"><span class="arrow">»</span> Motion Design</a></li>
+<li><a href="color-grading.html"><span class="arrow">»</span> Color Grading</a></li>
+<li><a href="sound-design.html"><span class="arrow">»</span> Sound Design</a></li>
+</ul></div>
+</div>
+</div>
+<div class="footer-bottom"><div class="footer-bottom-container">
+<p class="copyright">© 2025 Eclipse Studios. All rights reserved.</p>
+<div class="footer-bottom-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="cookies.html">Cookie Policy</a></div>
+</div></div>
+</div>
+</footer>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) navbar.classList.add('is-sticky');
+  else navbar.classList.remove('is-sticky');
+});
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# 1. Ignore everything
+*
+
+# 2. Un-ignore directories (so Git can look inside folders)
+!*/
+
+# 3. Un-ignore .html files
+!*.html
+
+# 4. Un-ignore the .gitignore file itself
+!.gitignore
